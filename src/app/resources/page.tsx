@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { staticResources } from "@/data/resources";
 import { ResourceGrid } from "@/components/resources/ResourceGrid";
+import { PageHeader } from "@/components/ui/PageHeader";
 import type { Resource } from "@/data/resources";
 
 export const metadata: Metadata = {
@@ -28,10 +29,7 @@ export default async function ResourcesPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <h1 className="text-3xl font-bold tracking-tight">Resources</h1>
-      <p className="mt-2 text-muted-foreground">
-        Curated materials for Physics Olympiad preparation.
-      </p>
+      <PageHeader titleKey="resources.title" descKey="resources.subtitle" />
       <div className="mt-10">
         <ResourceGrid resources={resources} />
       </div>

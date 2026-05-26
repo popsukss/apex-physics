@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
 import { PostList } from "@/components/community/PostList";
+import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -76,15 +75,7 @@ export default async function CommunityPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Community Q&A</h1>
-          <p className="mt-1 text-muted-foreground">Ask, answer, and learn together.</p>
-        </div>
-        <Link href="/community/new" className={buttonVariants()}>
-          Ask a Question
-        </Link>
-      </div>
+      <CommunityHeader />
       <PostList posts={transformedPosts} />
     </div>
   );

@@ -4,16 +4,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserMenu } from "@/components/auth/UserMenu";
-
-const links = [
-  { href: "/roadmap", label: "Roadmap" },
-  { href: "/resources", label: "Resources" },
-  { href: "/community", label: "Community" },
-  { href: "/about", label: "About" },
-];
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
+import { useLanguage } from "@/lib/i18n";
 
 export function Navbar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const links = [
+    { href: "/roadmap", label: t("nav.roadmap") },
+    { href: "/resources", label: t("nav.resources") },
+    { href: "/community", label: t("nav.community") },
+    { href: "/about", label: t("nav.about") },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
@@ -39,7 +43,11 @@ export function Navbar() {
           ))}
         </nav>
 
-        <UserMenu />
+        <div className="flex items-center gap-2">
+          <LanguageToggle />
+          <ThemeToggle />
+          <UserMenu />
+        </div>
       </div>
     </header>
   );

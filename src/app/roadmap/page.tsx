@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import roadmapData from "@/data/roadmap.json";
 import { CategorySection } from "@/components/roadmap/CategorySection";
 import { ProgressBar } from "@/components/roadmap/ProgressBar";
+import { useLanguage } from "@/lib/i18n";
 
 export default function RoadmapPage() {
+  const { t } = useLanguage();
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [mounted, setMounted] = useState(false);
 
@@ -41,11 +43,8 @@ export default function RoadmapPage() {
   if (!mounted) {
     return (
       <div className="mx-auto max-w-5xl px-4 py-12">
-        <h1 className="text-3xl font-bold tracking-tight">TPhO Roadmap</h1>
-        <p className="mt-2 text-muted-foreground">
-          Work through these topics in order. Check off each one as you complete
-          it.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t("roadmap.title")}</h1>
+        <p className="mt-2 text-muted-foreground">{t("roadmap.subtitle")}</p>
       </div>
     );
   }
@@ -55,14 +54,11 @@ export default function RoadmapPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
-      <h1 className="text-3xl font-bold tracking-tight">TPhO Roadmap</h1>
-      <p className="mt-2 text-muted-foreground">
-        Work through these topics in order. Check off each one as you complete
-        it.
-      </p>
+      <h1 className="text-3xl font-bold tracking-tight">{t("roadmap.title")}</h1>
+      <p className="mt-2 text-muted-foreground">{t("roadmap.subtitle")}</p>
 
       <div className="mt-8 p-6 rounded-lg border bg-card">
-        <p className="text-sm font-medium mb-2">Overall Progress</p>
+        <p className="text-sm font-medium mb-2">{t("roadmap.overall_progress")}</p>
         <ProgressBar completed={totalCompleted} total={allTopics.length} />
       </div>
 
