@@ -1,0 +1,62 @@
+{
+  "categories": [
+    {
+      "id": "mechanics",
+      "label": "Classical Mechanics",
+      "color": "blue",
+      "topics": [
+        { "id": "kinematics", "title": "Kinematics", "description": "Describing motion: displacement, velocity, acceleration in 1D/2D/3D", "order": 1 },
+        { "id": "newtons-laws", "title": "Newton's Laws", "description": "Forces, free body diagrams, friction, normal force", "order": 2 },
+        { "id": "work-energy", "title": "Work & Energy", "description": "Work-energy theorem, conservative forces, potential energy", "order": 3 },
+        { "id": "momentum", "title": "Momentum & Impulse", "description": "Linear momentum, collisions, center of mass", "order": 4 },
+        { "id": "rotation", "title": "Rotation & Torque", "description": "Angular kinematics, moment of inertia, angular momentum", "order": 5 },
+        { "id": "oscillations", "title": "Oscillations & Waves", "description": "SHM, damping, resonance, wave equations", "order": 6 },
+        { "id": "gravitation", "title": "Gravitation", "description": "Kepler's laws, orbital mechanics, gravitational potential", "order": 7 },
+        { "id": "lagrangian", "title": "Lagrangian Mechanics", "description": "Generalized coordinates, Euler-Lagrange equations", "order": 8 }
+      ]
+    },
+    {
+      "id": "thermodynamics",
+      "label": "Thermodynamics",
+      "color": "orange",
+      "topics": [
+        { "id": "kinetic-theory", "title": "Kinetic Theory", "description": "Ideal gas, Maxwell-Boltzmann distribution, equipartition", "order": 1 },
+        { "id": "laws-of-thermo", "title": "Laws of Thermodynamics", "description": "0th, 1st, 2nd, 3rd laws; entropy; Carnot cycle", "order": 2 },
+        { "id": "heat-transfer", "title": "Heat Transfer", "description": "Conduction, convection, radiation, Stefan-Boltzmann", "order": 3 },
+        { "id": "thermo-processes", "title": "Thermodynamic Processes", "description": "Isothermal, adiabatic, isobaric, isochoric; PV diagrams", "order": 4 }
+      ]
+    },
+    {
+      "id": "electromagnetism",
+      "label": "Electromagnetism",
+      "color": "yellow",
+      "topics": [
+        { "id": "electrostatics", "title": "Electrostatics", "description": "Coulomb's law, electric field, Gauss's law, potential", "order": 1 },
+        { "id": "circuits", "title": "Electric Circuits", "description": "Ohm's law, Kirchhoff's laws, RC/RL/LC circuits", "order": 2 },
+        { "id": "magnetostatics", "title": "Magnetostatics", "description": "Biot-Savart, Ampere's law, magnetic force", "order": 3 },
+        { "id": "induction", "title": "Electromagnetic Induction", "description": "Faraday's law, Lenz's law, inductance, transformers", "order": 4 },
+        { "id": "maxwell", "title": "Maxwell's Equations", "description": "Full set, displacement current, EM waves", "order": 5 }
+      ]
+    },
+    {
+      "id": "optics",
+      "label": "Optics",
+      "color": "green",
+      "topics": [
+        { "id": "geometric-optics", "title": "Geometric Optics", "description": "Reflection, refraction, lenses, mirrors, ray diagrams", "order": 1 },
+        { "id": "wave-optics", "title": "Wave Optics", "description": "Interference, diffraction, polarization, Huygens' principle", "order": 2 },
+        { "id": "modern-optics", "title": "Modern Optics", "description": "Photoelectric effect, photons, laser principles", "order": 3 }
+      ]
+    },
+    {
+      "id": "modern-physics",
+      "label": "Modern Physics",
+      "color": "purple",
+      "topics": [
+        { "id": "special-relativity", "title": "Special Relativity", "description": "Time dilation, length contraction, mass-energy equivalence", "order": 1 },
+        { "id": "quantum-mechanics", "title": "Quantum Mechanics", "description": "Wave-particle duality, Schrödinger equation, uncertainty principle", "order": 2 },
+        { "id": "atomic-physics", "title": "Atomic & Nuclear Physics", "description": "Bohr model, energy levels, radioactive decay, nuclear reactions", "order": 3 }
+      ]
+    }
+  ]
+}
