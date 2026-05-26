@@ -1,6 +1,9 @@
+"use client";
+
 import { FileText, Link as LinkIcon, Video, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Resource } from "@/data/resources";
+import { useLanguage } from "@/lib/i18n";
 
 interface ResourceCardProps {
   resource: Resource;
@@ -12,12 +15,6 @@ const typeIcons: Record<string, typeof FileText> = {
   video: Video,
 };
 
-const typeLabels: Record<string, string> = {
-  pdf: "PDF",
-  link: "Link",
-  video: "Video",
-};
-
 const categoryColors: Record<string, string> = {
   mechanics: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   thermodynamics: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
@@ -27,15 +24,23 @@ const categoryColors: Record<string, string> = {
   general: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
 };
 
-export function ResourceCard({ resource }: ResourceCardProps) {
-  const TypeIcon = typeIcons[resource.type] || LinkIcon;
-  const typeLabel = typeLabels[resource.type] || resource.type;
-  const categoryColor = categoryColors[resource.category] || categoryColors.general;
+const CATEGORY_KEY_MAP: Record<string, string> = {
+  mechanics: "mechanics",
+  thermodynamics: "thermodynamics",
+  electromagnetism: "electromagnetism",
+  optics: "optics",
+  "modern-physics": "modern_physics",
+  general: "general",
+};
 
-  const categoryLabel = resource.category
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+export function ResourceCard({ resource }: ResourceCardProps) {
+  const { t } = useLanguage();
+  const TypeIcon = typeIcons[resource.type] || LinkIcon;
+  const categoryColor = categoryColors[resource.category] || categoryColors.general;
+  const categoryKey = CATEGORY_KEY_MAP[resource.category] || "general";
+  const categoryLabel = t(`resources.category_labels.${categoryKey}`);
+  const typeKey = resource.type as "pdf" | "link" | "video";
+  const typeLabel = t(`resources.type_labels.${typeKey}`);
 
   return (
     <div className="flex flex-col rounded-lg border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md">
@@ -58,7 +63,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
       <div className="mt-auto">
         <a href={resource.url} target="_blank" rel="noopener noreferrer">
           <Button variant="ghost" size="sm" className="w-full justify-center">
-            Open
+            {t("resources.open")}
             <ExternalLink className="size-3" />
           </Button>
         </a>

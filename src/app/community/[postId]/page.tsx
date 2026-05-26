@@ -1,29 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Pin, BadgeCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Pin, BadgeCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { VoteButton } from "@/components/community/VoteButton";
 import { CommentThread, type CommentWithAuthor } from "@/components/community/CommentThread";
 import { CommentForm } from "@/components/community/CommentForm";
-
-function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-
-  if (diffSecs < 60) return "just now";
-  const diffMins = Math.floor(diffSecs / 60);
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 30) return `${diffDays}d ago`;
-  const diffMonths = Math.floor(diffDays / 30);
-  if (diffMonths < 12) return `${diffMonths}mo ago`;
-  return `${Math.floor(diffMonths / 12)}y ago`;
-}
+import { BackToDiscussions, CommentsHeading, PostMeta } from "@/components/community/PostDetailWidgets";
 
 export const metadata = { title: "Discussion" };
 
@@ -113,12 +94,7 @@ export default async function PostPage({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <Link href="/community">
-        <Button variant="ghost" size="sm" className="mb-6 gap-2">
-          <ArrowLeft className="size-4" />
-          Back to discussions
-        </Button>
-      </Link>
+      <BackToDiscussions />
 
       <article className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-start justify-between">
@@ -133,17 +109,7 @@ export default async function PostPage({
               )}
             </div>
 
-            <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-              {post.author && (
-                <>
-                  <span className="font-medium text-foreground">
-                    {post.author.username}
-                  </span>
-                  <span>•</span>
-                  <span>{formatRelativeTime(post.created_at)}</span>
-                </>
-              )}
-            </div>
+            <PostMeta author={post.author} createdAt={post.created_at} />
 
             {post.category && (
               <div className="mt-3">
@@ -172,22 +138,14 @@ export default async function PostPage({
       </article>
 
       <section className="mt-8">
-        <h2 className="mb-4 text-lg font-semibold text-foreground">
-          Comments ({comments.length})
-        </h2>
+        <CommentsHeading count={comments.length} />
 
         <div className="space-y-6">
           <div className="rounded-lg border border-border bg-card p-4">
             <CommentForm postId={postId} />
           </div>
 
-          {comments.length > 0 ? (
-            <CommentThread comments={comments} postId={postId} />
-          ) : (
-            <div className="py-8 text-center text-muted-foreground">
-              No comments yet. Be the first to comment!
-            </div>
-          )}
+          <CommentThread comments={comments} postId={postId} />
         </div>
       </section>
     </div>

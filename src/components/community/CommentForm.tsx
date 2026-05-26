@@ -5,6 +5,7 @@ import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n";
 
 interface CommentFormProps {
   postId: string;
@@ -14,6 +15,7 @@ interface CommentFormProps {
 
 export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
   const supabase = createClient();
+  const { t } = useLanguage();
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +25,7 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
     setError(null);
 
     if (!content.trim()) {
-      setError("Comment cannot be empty");
+      setError(t("community.comment_form.error_empty"));
       return;
     }
 
@@ -33,7 +35,7 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
       const { data: authData } = await supabase.auth.getUser();
 
       if (!authData.user) {
-        setError("Sign in to comment");
+        setError(t("community.comment_form.error_sign_in"));
         setSubmitting(false);
         return;
       }
@@ -45,11 +47,9 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
         content: content.trim(),
       };
 
-      const { error: insertError } = await (
-        supabase
-          .from("comments")
-          .insert([commentData as never])
-      );
+      const { error: insertError } = await supabase
+        .from("comments")
+        .insert([commentData as never]);
 
       if (insertError) {
         setError(insertError.message);
@@ -60,7 +60,10 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
       setContent("");
       onSuccess?.();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to post comment";
+      const message =
+        err instanceof Error
+          ? err.message
+          : t("community.comment_form.error_failed");
       setError(message);
       setSubmitting(false);
     }
@@ -71,7 +74,11 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={parentId ? "Write a reply..." : "Write a comment..."}
+        placeholder={
+          parentId
+            ? t("community.comment_form.placeholder_reply")
+            : t("community.comment_form.placeholder_comment")
+        }
         rows={parentId ? 3 : 4}
         disabled={submitting}
         className={cn(
@@ -93,11 +100,17 @@ export function CommentForm({ postId, parentId, onSuccess }: CommentFormProps) {
           onClick={() => setContent("")}
           disabled={submitting || !content.trim()}
         >
-          Cancel
+          {t("community.comment_form.cancel")}
         </Button>
-        <Button type="submit" size="sm" disabled={submitting || !content.trim()}>
+        <Button
+          type="submit"
+          size="sm"
+          disabled={submitting || !content.trim()}
+        >
           <Send className="size-4" />
-          {submitting ? "Posting..." : "Post"}
+          {submitting
+            ? t("community.comment_form.posting")
+            : t("community.comment_form.post")}
         </Button>
       </div>
     </form>

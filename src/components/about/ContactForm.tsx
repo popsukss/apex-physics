@@ -3,8 +3,10 @@
 import { FormEvent, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/lib/i18n'
 
 export function ContactForm() {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({ name: '', email: '', message: '' })
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -33,16 +35,16 @@ export function ContactForm() {
       if (!response.ok) {
         const data = await response.json()
         setStatus('error')
-        setErrorMessage(data.error || 'Failed to send message')
+        setErrorMessage(data.error || t('contact_form.error_generic'))
         return
       }
 
       setStatus('success')
       setFormData({ name: '', email: '', message: '' })
       setTimeout(() => setStatus('idle'), 5000)
-    } catch (error) {
+    } catch {
       setStatus('error')
-      setErrorMessage('An error occurred. Please try again.')
+      setErrorMessage(t('contact_form.error_generic'))
     } finally {
       setLoading(false)
     }
@@ -52,7 +54,7 @@ export function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium mb-1">
-          Name
+          {t('contact_form.name_label')}
         </label>
         <input
           type="text"
@@ -67,14 +69,14 @@ export function ContactForm() {
             'focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/50',
             'disabled:cursor-not-allowed disabled:opacity-50'
           )}
-          placeholder="Your name"
+          placeholder={t('contact_form.name_placeholder')}
           disabled={loading}
         />
       </div>
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-1">
-          Email
+          {t('contact_form.email_label')}
         </label>
         <input
           type="email"
@@ -96,7 +98,7 @@ export function ContactForm() {
 
       <div>
         <label htmlFor="message" className="block text-sm font-medium mb-1">
-          Message
+          {t('contact_form.message_label')}
         </label>
         <textarea
           id="message"
@@ -112,14 +114,14 @@ export function ContactForm() {
             'disabled:cursor-not-allowed disabled:opacity-50',
             'resize-none'
           )}
-          placeholder="Your message..."
+          placeholder={t('contact_form.message_placeholder')}
           disabled={loading}
         />
       </div>
 
       {status === 'success' && (
         <div className="rounded-lg bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
-          Message sent successfully! I'll get back to you soon.
+          {t('contact_form.success')}
         </div>
       )}
 
@@ -130,7 +132,7 @@ export function ContactForm() {
       )}
 
       <Button type="submit" disabled={loading}>
-        {loading ? 'Sending...' : 'Send Message'}
+        {loading ? t('contact_form.sending') : t('contact_form.send')}
       </Button>
     </form>
   )

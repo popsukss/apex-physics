@@ -1,24 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Pin, BadgeCheck, ChevronUp, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-
-  if (diffSecs < 60) return "just now";
-  const diffMins = Math.floor(diffSecs / 60);
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 30) return `${diffDays}d ago`;
-  const diffMonths = Math.floor(diffDays / 30);
-  if (diffMonths < 12) return `${diffMonths}mo ago`;
-  return `${Math.floor(diffMonths / 12)}y ago`;
-}
+import { useRelativeTime } from "@/lib/i18n";
 
 export type PostCardProps = {
   post: {
@@ -36,7 +21,11 @@ export type PostCardProps = {
 };
 
 export function PostCard({ post }: PostCardProps) {
-  const contentPreview = post.content.length > 100 ? post.content.slice(0, 100) + "..." : post.content;
+  const formatRelativeTime = useRelativeTime();
+  const contentPreview =
+    post.content.length > 100
+      ? post.content.slice(0, 100) + "..."
+      : post.content;
 
   return (
     <Link href={`/community/${post.id}`}>
@@ -44,7 +33,9 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-foreground group-hover:text-primary">{post.title}</h3>
+              <h3 className="font-semibold text-foreground group-hover:text-primary">
+                {post.title}
+              </h3>
               {post.is_pinned && (
                 <Pin className="h-4 w-4 shrink-0 fill-yellow-500 text-yellow-500" />
               )}

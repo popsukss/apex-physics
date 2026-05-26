@@ -6,15 +6,16 @@ import { Send, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n";
 
-const CATEGORIES = [
-  { value: "", label: "Select a category..." },
-  { value: "mechanics", label: "Mechanics" },
-  { value: "thermodynamics", label: "Thermodynamics" },
-  { value: "electromagnetism", label: "Electromagnetism" },
-  { value: "optics", label: "Optics" },
-  { value: "modern-physics", label: "Modern Physics" },
-  { value: "other", label: "Other" },
+const CATEGORY_KEYS = [
+  { value: "", key: "community.post_form.category_select" },
+  { value: "mechanics", key: "community.categories.mechanics" },
+  { value: "thermodynamics", key: "community.categories.thermodynamics" },
+  { value: "electromagnetism", key: "community.categories.electromagnetism" },
+  { value: "optics", key: "community.categories.optics" },
+  { value: "modern-physics", key: "community.categories.modern_physics" },
+  { value: "other", key: "community.categories.other" },
 ];
 
 interface ValidationErrors {
@@ -26,6 +27,7 @@ interface ValidationErrors {
 export function PostForm() {
   const router = useRouter();
   const supabase = createClient();
+  const { t } = useLanguage();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -37,15 +39,15 @@ export function PostForm() {
     const newErrors: ValidationErrors = {};
 
     if (!title.trim()) {
-      newErrors.title = "Title is required";
+      newErrors.title = t("community.post_form.error_title_required");
     } else if (title.length > 200) {
-      newErrors.title = "Title must be 200 characters or less";
+      newErrors.title = t("community.post_form.error_title_too_long");
     }
 
     if (!content.trim()) {
-      newErrors.content = "Question is required";
+      newErrors.content = t("community.post_form.error_content_required");
     } else if (content.length < 20) {
-      newErrors.content = "Question must be at least 20 characters";
+      newErrors.content = t("community.post_form.error_content_too_short");
     }
 
     setErrors(newErrors);
@@ -66,7 +68,7 @@ export function PostForm() {
       const { data: authData } = await supabase.auth.getUser();
 
       if (!authData.user) {
-        setErrors({ submit: "You must be signed in to post" });
+        setErrors({ submit: t("community.post_form.error_sign_in") });
         setSubmitting(false);
         return;
       }
@@ -87,7 +89,7 @@ export function PostForm() {
       router.push("/community");
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "An unexpected error occurred";
+        err instanceof Error ? err.message : t("community.post_form.error_sign_in");
       setErrors({ submit: message });
       setSubmitting(false);
     }
@@ -97,14 +99,14 @@ export function PostForm() {
     <form onSubmit={handleSubmit} className="mt-6 space-y-6">
       <div>
         <label htmlFor="title" className="block text-sm font-medium mb-2">
-          Title
+          {t("community.post_form.title_label")}
         </label>
         <input
           id="title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="What's your physics question?"
+          placeholder={t("community.post_form.title_placeholder")}
           maxLength={200}
           disabled={submitting}
           className={cn(
@@ -129,7 +131,7 @@ export function PostForm() {
 
       <div>
         <label htmlFor="category" className="block text-sm font-medium mb-2">
-          Category
+          {t("community.post_form.category_label")}
         </label>
         <select
           id="category"
@@ -139,14 +141,13 @@ export function PostForm() {
           className={cn(
             "w-full rounded-lg border px-3 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-offset-1",
             "border-input bg-background",
-            "placeholder:text-muted-foreground",
             "focus:border-primary/50 focus:ring-primary/20",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
-          {CATEGORIES.map((cat) => (
+          {CATEGORY_KEYS.map((cat) => (
             <option key={cat.value} value={cat.value}>
-              {cat.label}
+              {t(cat.key)}
             </option>
           ))}
         </select>
@@ -154,13 +155,13 @@ export function PostForm() {
 
       <div>
         <label htmlFor="content" className="block text-sm font-medium mb-2">
-          Your Question (Markdown supported)
+          {t("community.post_form.content_label")}
         </label>
         <textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Describe your question in detail..."
+          placeholder={t("community.post_form.content_placeholder")}
           rows={8}
           disabled={submitting}
           className={cn(
@@ -190,13 +191,11 @@ export function PostForm() {
         </div>
       )}
 
-      <Button
-        type="submit"
-        disabled={submitting}
-        className="w-full gap-2"
-      >
+      <Button type="submit" disabled={submitting} className="w-full gap-2">
         <Send className="size-4" />
-        {submitting ? "Posting..." : "Post Question"}
+        {submitting
+          ? t("community.post_form.submitting")
+          : t("community.post_form.submit")}
       </Button>
     </form>
   );

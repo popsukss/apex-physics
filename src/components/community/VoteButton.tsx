@@ -5,6 +5,7 @@ import { ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
+import { useLanguage } from "@/lib/i18n";
 
 interface VoteButtonProps {
   targetId: string;
@@ -20,6 +21,7 @@ export function VoteButton({
   initialUserVote,
 }: VoteButtonProps) {
   const supabase = createClient();
+  const { t } = useLanguage();
   const [count, setCount] = useState(initialCount);
   const [userVote, setUserVote] = useState(initialUserVote);
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ export function VoteButton({
       const { data: authData } = await supabase.auth.getUser();
 
       if (!authData.user) {
-        alert("Sign in to vote");
+        alert(t("community.vote_sign_in"));
         setLoading(false);
         return;
       }

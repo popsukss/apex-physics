@@ -5,35 +5,39 @@ import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResourceCard } from "./ResourceCard";
 import type { Resource } from "@/data/resources";
+import { useLanguage } from "@/lib/i18n";
 
 interface ResourceGridProps {
   resources: Resource[];
 }
 
-const categories = [
-  { label: "All", value: "all" },
-  { label: "Mechanics", value: "mechanics" },
-  { label: "Thermodynamics", value: "thermodynamics" },
-  { label: "Electromagnetism", value: "electromagnetism" },
-  { label: "Optics", value: "optics" },
-  { label: "Modern Physics", value: "modern-physics" },
-  { label: "General", value: "general" },
+const CATEGORY_KEYS = [
+  { value: "all", key: "resources.category_labels.all" },
+  { value: "mechanics", key: "resources.category_labels.mechanics" },
+  { value: "thermodynamics", key: "resources.category_labels.thermodynamics" },
+  { value: "electromagnetism", key: "resources.category_labels.electromagnetism" },
+  { value: "optics", key: "resources.category_labels.optics" },
+  { value: "modern-physics", key: "resources.category_labels.modern_physics" },
+  { value: "general", key: "resources.category_labels.general" },
 ];
 
-const types = [
-  { label: "All", value: "all" },
-  { label: "PDF", value: "pdf" },
-  { label: "Link", value: "link" },
-  { label: "Video", value: "video" },
+const TYPE_KEYS = [
+  { value: "all", key: "resources.type_labels.all" },
+  { value: "pdf", key: "resources.type_labels.pdf" },
+  { value: "link", key: "resources.type_labels.link" },
+  { value: "video", key: "resources.type_labels.video" },
 ];
 
 export function ResourceGrid({ resources }: ResourceGridProps) {
+  const { t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
 
   const filtered = resources.filter((resource) => {
-    const matchCategory = selectedCategory === "all" || resource.category === selectedCategory;
-    const matchType = selectedType === "all" || resource.type === selectedType;
+    const matchCategory =
+      selectedCategory === "all" || resource.category === selectedCategory;
+    const matchType =
+      selectedType === "all" || resource.type === selectedType;
     return matchCategory && matchType;
   });
 
@@ -42,18 +46,20 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Filter className="size-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-muted-foreground">Category</span>
+          <span className="text-sm font-medium text-muted-foreground">
+            {t("resources.category_filter")}
+          </span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
+          {CATEGORY_KEYS.map((cat) => (
             <Button
-              key={category.value}
-              variant={selectedCategory === category.value ? "default" : "outline"}
+              key={cat.value}
+              variant={selectedCategory === cat.value ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(category.value)}
+              onClick={() => setSelectedCategory(cat.value)}
               className="rounded-full"
             >
-              {category.label}
+              {t(cat.key)}
             </Button>
           ))}
         </div>
@@ -62,10 +68,12 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Filter className="size-4 text-muted-foreground" />
-          <span className="text-sm font-medium text-muted-foreground">Type</span>
+          <span className="text-sm font-medium text-muted-foreground">
+            {t("resources.type_filter")}
+          </span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {types.map((type) => (
+          {TYPE_KEYS.map((type) => (
             <Button
               key={type.value}
               variant={selectedType === type.value ? "default" : "outline"}
@@ -73,7 +81,7 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
               onClick={() => setSelectedType(type.value)}
               className="rounded-full"
             >
-              {type.label}
+              {t(type.key)}
             </Button>
           ))}
         </div>
@@ -87,7 +95,7 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
         </div>
       ) : (
         <div className="rounded-lg border border-border bg-muted/30 p-8 text-center">
-          <p className="text-sm text-muted-foreground">No resources found for your selection.</p>
+          <p className="text-sm text-muted-foreground">{t("resources.no_results")}</p>
         </div>
       )}
     </div>

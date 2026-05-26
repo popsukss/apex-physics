@@ -7,24 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { VoteButton } from "./VoteButton";
 import { CommentForm } from "./CommentForm";
-
-function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-
-  if (diffSecs < 60) return "just now";
-  const diffMins = Math.floor(diffSecs / 60);
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h ago`;
-  const diffDays = Math.floor(diffHours / 24);
-  if (diffDays < 30) return `${diffDays}d ago`;
-  const diffMonths = Math.floor(diffDays / 30);
-  if (diffMonths < 12) return `${diffMonths}mo ago`;
-  return `${Math.floor(diffMonths / 12)}y ago`;
-}
+import { useLanguage, useRelativeTime } from "@/lib/i18n";
 
 export type CommentWithAuthor = {
   id: string;
@@ -77,6 +60,8 @@ function CommentItem({
   depth?: number;
 }) {
   const router = useRouter();
+  const { t } = useLanguage();
+  const formatRelativeTime = useRelativeTime();
   const [showReplyForm, setShowReplyForm] = useState(false);
 
   const handleCommentSuccess = () => {
@@ -95,7 +80,7 @@ function CommentItem({
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-foreground">
-              {comment.author?.username || "Anonymous"}
+              {comment.author?.username || t("community.anonymous")}
             </span>
             {comment.is_verified && (
               <BadgeCheck className="size-3.5 shrink-0 fill-green-500 text-green-500" />
@@ -122,7 +107,7 @@ function CommentItem({
                 className="gap-1.5"
               >
                 <Reply className="size-3.5" />
-                Reply
+                {t("community.reply")}
               </Button>
             )}
           </div>
@@ -160,12 +145,13 @@ export function CommentThread({
   postId,
   depth = 0,
 }: CommentThreadProps) {
+  const { t } = useLanguage();
   const commentTree = depth === 0 ? buildCommentTree(comments) : comments;
 
   if (commentTree.length === 0) {
     return (
       <div className="py-8 text-center text-muted-foreground">
-        No comments yet. Be the first to comment!
+        {t("community.no_comments")}
       </div>
     );
   }

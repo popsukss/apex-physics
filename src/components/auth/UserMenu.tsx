@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n";
 
 type AuthUser = {
   id: string;
@@ -15,6 +16,7 @@ type AuthUser = {
 };
 
 export function UserMenu() {
+  const { t } = useLanguage();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
@@ -65,7 +67,7 @@ export function UserMenu() {
             isOpen && "bg-muted text-foreground"
           )}
         >
-          Sign In
+          {t("auth.sign_in")}
           <ChevronDown className="ml-1 size-3.5" />
         </button>
 
@@ -156,7 +158,7 @@ export function UserMenu() {
             className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-none hover:bg-muted transition-colors text-left text-destructive hover:text-destructive"
           >
             <LogOut className="size-4" />
-            Sign Out
+            {t("auth.sign_out")}
           </button>
         </div>
       )}
