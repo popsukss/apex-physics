@@ -12,6 +12,14 @@ export async function POST(request: Request) {
       )
     }
 
+    if (
+      typeof name !== 'string' || name.length > 100 ||
+      typeof email !== 'string' || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      typeof message !== 'string' || message.length > 5000
+    ) {
+      return Response.json({ error: 'Invalid name, email or message' }, { status: 400 })
+    }
+
     const contactEmail = process.env.CONTACT_EMAIL
     if (!contactEmail) {
       return Response.json(
